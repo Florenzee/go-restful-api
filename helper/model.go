@@ -39,3 +39,23 @@ func ToProductResponses(product []domain.Product) []web.ProductResponse {
 	}
 	return productResponse
 }
+
+// customer
+func ToCustomerResponse(customer domain.Customer) web.CustomerResponse {
+	return web.CustomerResponse{
+		CustomerID: customer.CustomerID,
+		Name:       customer.Name,
+		Email:      customer.Email,
+		Phone:      customer.Phone,
+		Address:    customer.Address,
+		LoyaltyPts: customer.LoyaltyPts,
+	}
+}
+
+func ToCustomerResponses(customer []domain.Customer) []web.CustomerResponse {
+	var customerResponse []web.CustomerResponse
+	for _, customer := range customer {
+		customerResponse = append(customerResponse, ToCustomerResponse(customer))
+	}
+	return customerResponse
+}
