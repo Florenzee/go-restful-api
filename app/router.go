@@ -6,10 +6,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewRouter(app *fiber.App, categoryController controller.CategoryController) {
+func NewRouter(app *fiber.App, categoryController controller.CategoryController,
+	productController controller.ProductController) {
 	authMiddleware := middleware.NewAuthMiddleware()
 
 	api := app.Group("/api", authMiddleware)
+
+	//categories api
 	categories := api.Group("/categories")
 
 	categories.Get("/", categoryController.FindAll)
@@ -17,4 +20,12 @@ func NewRouter(app *fiber.App, categoryController controller.CategoryController)
 	categories.Post("/", categoryController.Create)
 	categories.Put("/:categoryId", categoryController.Update)
 	categories.Delete("/:categoryId", categoryController.Delete)
+
+	//product api
+	products := api.Group("/products")
+	products.Get("/", productController.FindAll)
+	products.Get("/:productId", productController.FindById)
+	products.Post("/", productController.Create)
+	products.Put("/:productId", productController.Update)
+	products.Delete("/:productId", productController.Delete)
 }

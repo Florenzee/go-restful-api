@@ -5,6 +5,7 @@ import (
 	"github.com/aronipurwanto/go-restful-api/model/web"
 )
 
+// category
 func ToCategoryResponse(category domain.Category) web.CategoryResponse {
 	return web.CategoryResponse{
 		Id:   category.Id,
@@ -18,4 +19,23 @@ func ToCategoryResponses(categories []domain.Category) []web.CategoryResponse {
 		categoryResponses = append(categoryResponses, ToCategoryResponse(category))
 	}
 	return categoryResponses
+}
+
+// product
+func ToProductResponse(product domain.Product) web.ProductResponse {
+	return web.ProductResponse{
+		ProductID: product.ProductID,
+		Name:      product.Name,
+		Price:     product.Price,
+		StockQty:  product.StockQty,
+		Category:  product.Category,
+	}
+}
+
+func ToProductResponses(product []domain.Product) []web.ProductResponse {
+	var productResponse []web.ProductResponse
+	for _, product := range product {
+		productResponse = append(productResponse, ToProductResponse(product))
+	}
+	return productResponse
 }

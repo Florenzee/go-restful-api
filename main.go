@@ -21,8 +21,11 @@ func main() {
 	db := app.NewDB()
 
 	// Run Auto Migration (Opsional, bisa dihapus jika tidak diperlukan)
-	err := db.AutoMigrate(&domain.Category{})
-	helper.PanicIfError(err)
+	errCategory := db.AutoMigrate(&domain.Category{})
+	helper.PanicIfError(errCategory)
+
+	errProduct := db.AutoMigrate(&domain.Product{})
+	helper.PanicIfError(errProduct)
 
 	// Initialize Validator
 	validate := validator.New()
@@ -32,11 +35,15 @@ func main() {
 	categoryService := service.NewCategoryService(categoryRepository, validate)
 	categoryController := controller.NewCategoryController(categoryService)
 
+	productRepository := repository.NewProductRepository(db)
+	productService := service.NewProductService(productRepository, validate)
+	productController := controller.NewProductController(productService)
+
 	// Setup Routes
-	app.NewRouter(server, categoryController)
+	app.NewRouter(server, categoryController, productController)
 
 	// Start Server
 	log.Println("Server running on port 8080")
-	err = server.Listen(":8080")
+	err := server.Listen(":8080")
 	helper.PanicIfError(err)
 }
